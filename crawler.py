@@ -2,16 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import os
-import re
+import os.path
 import time
-import json
 import requests
 import logging
+import hashlib
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse, unquote
 from markdownify import markdownify as md
 from concurrent.futures import ThreadPoolExecutor
 import random
+from db_manager import DBManager
 
 # Configure logging
 logging.basicConfig(
@@ -47,9 +48,9 @@ class LiangLiangLeeCrawler:
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         
-        # Load visited URLs from storage
-        self.storage_file = os.path.join(output_dir, 'visited_urls.json')
-        self.load_visited_urls()
+        # Initialize database manager
+        self.db_manager = DBManager(os.path.join(output_dir, 'visited_urls.db'))
+        self.visited_urls = self.db_manager.get_visited_urls()
     
     def is_valid_url(self, url):
         """
@@ -151,7 +152,15 @@ class LiangLiangLeeCrawler:
         
         return markdown_content
     
-    def save_to_file(self, url, content):
+    def get_save_to_file_path(self, url):
+        """Generate a file path from a URL
+        
+        Args:
+            url (str): The URL to generate a file path from
+            
+        Returns:
+            str: The generated file path
+        """
         # Parse URL to create a file path
         parsed_url = urlparse(url)
         path_parts = [unquote(part) for part in parsed_url.path.strip('/').split('/')]
@@ -159,8 +168,6 @@ class LiangLiangLeeCrawler:
         # Create directory structure
         if path_parts and path_parts[0]:
             dir_path = os.path.join(self.output_dir, *path_parts[:-1]) if len(path_parts) > 1 else self.output_dir
-            if not os.path.exists(dir_path):
-                os.makedirs(dir_path, exist_ok=True)
         else:
             dir_path = self.output_dir
         
@@ -171,63 +178,67 @@ class LiangLiangLeeCrawler:
         else:
             filename = 'index'
         
+        # Handle file extensions
+        if url.endswith('.pdf'):
+            if not filename.endswith('.pdf'):
+                filename += '.pdf'
+        else:
+            if not filename.endswith('.md'):
+                filename += '.md'
+        
+        # Ensure directory exists
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path, exist_ok=True)
+        
+        return os.path.join(dir_path, filename)
+
+    def save_to_file(self, url, content):
+        file_path = self.get_save_to_file_path(url)
+        
         # Handle PDF files differently
         if url.endswith('.pdf'):
-            file_path = os.path.join(dir_path, filename)
             # Save PDF content in binary mode
             with open(file_path, 'wb') as f:
                 f.write(content)
         else:
-            # Ensure non-PDF files have .md extension
-            if not filename.endswith('.md'):
-                filename += '.md'
-            file_path = os.path.join(dir_path, filename)
             # Save markdown content
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
         
         return file_path
     
-    def load_visited_urls(self):
-        """Load visited URLs from storage file"""
-        if os.path.exists(self.storage_file):
-            try:
-                with open(self.storage_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    self.visited_urls = set(data.keys())
-                    logger.info(f"Loaded {len(self.visited_urls)} visited URLs from storage")
-            except Exception as e:
-                logger.error(f"Error loading visited URLs: {str(e)}")
-                self.visited_urls = set()
-    
+    def get_url_hash(self, url):
+        """Generate MD5 hash for a URL"""
+        return hashlib.md5(url.encode('utf-8')).hexdigest()
+
     def save_visited_url(self, url, file_path):
-        """Save visited URL and its file path to storage"""
+        """Save visited URL and its file path to database"""
         try:
-            data = {}
-            if os.path.exists(self.storage_file):
-                with open(self.storage_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-            
-            data[url] = file_path
-            with open(self.storage_file, 'w', encoding='utf-8') as f:
-                json.dump(data, f, ensure_ascii=False, indent=2)
+            url_hash = self.get_url_hash(url)
+            self.db_manager.add_visited_url(url_hash, url, file_path)
         except Exception as e:
             logger.error(f"Error saving visited URL: {str(e)}")
     
     def crawl_page(self, url):
         # Check if URL is already visited and file exists
         try:
-            if os.path.exists(self.storage_file):
-                with open(self.storage_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    if url in data and os.path.exists(data[url]):
-                        logger.info(f"Skipping {url}, already downloaded to {data[url]}")
-                        if url not in self.visited_urls:
-                            self.visited_urls.add(url)
-                        return []
+            file_path = self.db_manager.get_file_path(url)
+            if file_path and os.path.exists(file_path):
+                logger.info(f"Skipping {url}, already downloaded to {file_path}")
+                if url not in self.visited_urls:
+                    self.visited_urls.add(url)
+                return []
         except Exception as e:
             logger.error(f"Error checking visited URL: {str(e)}")
         
+        # Check if file_path exists
+        file_path = self.get_save_to_file_path(url)
+        if os.path.exists(file_path):
+            logger.info(f"Skipping {url}, already downloaded to {file_path}")
+            if url not in self.visited_urls:
+                self.visited_urls.add(url)
+            return []
+
         self.visited_urls.add(url)
         logger.info(f"Crawling: {url}")
         
