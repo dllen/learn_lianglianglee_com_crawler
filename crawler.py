@@ -216,15 +216,17 @@ class LiangLiangLeeCrawler:
     
     def crawl_page(self, url):
         # Check if URL is already visited and file exists
-        if url in self.visited_urls:
-            try:
+        try:
+            if os.path.exists(self.storage_file):
                 with open(self.storage_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     if url in data and os.path.exists(data[url]):
                         logger.info(f"Skipping {url}, already downloaded to {data[url]}")
+                        if url not in self.visited_urls:
+                            self.visited_urls.add(url)
                         return []
-            except Exception as e:
-                logger.error(f"Error checking visited URL: {str(e)}")
+        except Exception as e:
+            logger.error(f"Error checking visited URL: {str(e)}")
         
         self.visited_urls.add(url)
         logger.info(f"Crawling: {url}")
