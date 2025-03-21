@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=42.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "learn_lianglianglee_com_crawler"
+version = "0.1.0"
+description = "A Python web crawler designed to backup the entire content of learn.lianglianglee.com in Markdown format"
+requires-python = ">=3.6"
+dependencies = [
+    "requests>=2.25.1",
+    "beautifulsoup4>=4.9.3",
+    "markdownify>=0.10.0",
+]
+
+[tool.uv]
+packages = [
+    "requests>=2.25.1",
+    "beautifulsoup4>=4.9.3",
+    "markdownify>=0.10.0",
+]
