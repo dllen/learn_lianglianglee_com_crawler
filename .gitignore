@@ -16,8 +16,6 @@ build/
 # Logs
 *.log
 
-# Output directory
-output/
 
 # IDE specific files
 .idea/
