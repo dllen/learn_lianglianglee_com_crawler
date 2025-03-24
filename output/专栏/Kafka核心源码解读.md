@@ -1,0 +1,52 @@
+# Kafka核心源码解读 
+
+Source: https://learn.lianglianglee.com/专栏/Kafka核心源码解读
+
+因收到Google相关通知，网站将会择期关闭。[相关通知内容](https://lumendatabase.org/notices/44265620)
+
+---
+
+# Kafka核心源码解读
+
+* [00 导读 构建Kafka工程和源码阅读环境、Scala语言热身.md](/专栏/Kafka核心源码解读/00 导读 构建Kafka工程和源码阅读环境、Scala语言热身.md)
+* [00 开篇词 阅读源码，逐渐成了职业进阶道路上的“必选项”.md](/专栏/Kafka核心源码解读/00 开篇词  阅读源码，逐渐成了职业进阶道路上的“必选项”.md)
+* [00 重磅加餐 带你快速入门Scala语言.md](/专栏/Kafka核心源码解读/00 重磅加餐 带你快速入门Scala语言.md)
+* [01 日志段：保存消息文件的对象是怎么实现的？.md](/专栏/Kafka核心源码解读/01 日志段：保存消息文件的对象是怎么实现的？.md)
+* [02 日志（上）：日志究竟是如何加载日志段的？.md](/专栏/Kafka核心源码解读/02 日志（上）：日志究竟是如何加载日志段的？.md)
+* [03 日志（下）：彻底搞懂Log对象的常见操作.md](/专栏/Kafka核心源码解读/03 日志（下）：彻底搞懂Log对象的常见操作.md)
+* [04 索引（上）：改进的二分查找算法在Kafka索引的应用.md](/专栏/Kafka核心源码解读/04 索引（上）：改进的二分查找算法在Kafka索引的应用.md)
+* [05 索引（下）：位移索引和时间戳索引的区别是什么？.md](/专栏/Kafka核心源码解读/05 索引（下）：位移索引和时间戳索引的区别是什么？.md)
+* [06 请求通道：如何实现Kafka请求队列？.md](/专栏/Kafka核心源码解读/06 请求通道：如何实现Kafka请求队列？.md)
+* [07 SocketServer（上）：Kafka到底是怎么应用NIO实现网络通信的？.md](/专栏/Kafka核心源码解读/07 SocketServer（上）：Kafka到底是怎么应用NIO实现网络通信的？.md)
+* [08 SocketServer（中）：请求还要区分优先级？.md](/专栏/Kafka核心源码解读/08 SocketServer（中）：请求还要区分优先级？.md)
+* [09 SocketServer（下）：请求处理全流程源码分析.md](/专栏/Kafka核心源码解读/09 SocketServer（下）：请求处理全流程源码分析.md)
+* [10 KafkaApis：Kafka最重要的源码入口，没有之一.md](/专栏/Kafka核心源码解读/10 KafkaApis：Kafka最重要的源码入口，没有之一.md)
+* [11 Controller元数据：Controller都保存有哪些东西？有几种状态？.md](/专栏/Kafka核心源码解读/11 Controller元数据：Controller都保存有哪些东西？有几种状态？.md)
+* [12 ControllerChannelManager：Controller如何管理请求发送？.md](/专栏/Kafka核心源码解读/12 ControllerChannelManager：Controller如何管理请求发送？.md)
+* [13 ControllerEventManager：变身单线程后的Controller如何处理事件？.md](/专栏/Kafka核心源码解读/13 ControllerEventManager：变身单线程后的Controller如何处理事件？.md)
+* [14 Controller选举是怎么实现的？.md](/专栏/Kafka核心源码解读/14 Controller选举是怎么实现的？.md)
+* [15 如何理解Controller在Kafka集群中的作用？.md](/专栏/Kafka核心源码解读/15 如何理解Controller在Kafka集群中的作用？.md)
+* [16 TopicDeletionManager： Topic是怎么被删除的？.md](/专栏/Kafka核心源码解读/16 TopicDeletionManager： Topic是怎么被删除的？.md)
+* [17 ReplicaStateMachine：揭秘副本状态机实现原理.md](/专栏/Kafka核心源码解读/17 ReplicaStateMachine：揭秘副本状态机实现原理.md)
+* [18 PartitionStateMachine：分区状态转换如何实现？.md](/专栏/Kafka核心源码解读/18 PartitionStateMachine：分区状态转换如何实现？.md)
+* [19 TimingWheel：探究Kafka定时器背后的高效时间轮算法.md](/专栏/Kafka核心源码解读/19 TimingWheel：探究Kafka定时器背后的高效时间轮算法.md)
+* [20 DelayedOperation：Broker是怎么延时处理请求的？.md](/专栏/Kafka核心源码解读/20 DelayedOperation：Broker是怎么延时处理请求的？.md)
+* [21 AbstractFetcherThread：拉取消息分几步？.md](/专栏/Kafka核心源码解读/21 AbstractFetcherThread：拉取消息分几步？.md)
+* [22 ReplicaFetcherThread：Follower如何拉取Leader消息？.md](/专栏/Kafka核心源码解读/22 ReplicaFetcherThread：Follower如何拉取Leader消息？.md)
+* [23 ReplicaManager（上）：必须要掌握的副本管理类定义和核心字段.md](/专栏/Kafka核心源码解读/23 ReplicaManager（上）：必须要掌握的副本管理类定义和核心字段.md)
+* [24 ReplicaManager（中）：副本管理器是如何读写副本的？.md](/专栏/Kafka核心源码解读/24 ReplicaManager（中）：副本管理器是如何读写副本的？.md)
+* [25 ReplicaManager（下）：副本管理器是如何管理副本的？.md](/专栏/Kafka核心源码解读/25 ReplicaManager（下）：副本管理器是如何管理副本的？.md)
+* [26 MetadataCache：Broker是怎么异步更新元数据缓存的？.md](/专栏/Kafka核心源码解读/26 MetadataCache：Broker是怎么异步更新元数据缓存的？.md)
+* [27 消费者组元数据（上）：消费者组都有哪些元数据？.md](/专栏/Kafka核心源码解读/27 消费者组元数据（上）：消费者组都有哪些元数据？.md)
+* [28 消费者组元数据（下）：Kafka如何管理这些元数据？.md](/专栏/Kafka核心源码解读/28 消费者组元数据（下）：Kafka如何管理这些元数据？.md)
+* [29 GroupMetadataManager：组元数据管理器是个什么东西？.md](/专栏/Kafka核心源码解读/29 GroupMetadataManager：组元数据管理器是个什么东西？.md)
+* [30 GroupMetadataManager：位移主题保存的只是位移吗？.md](/专栏/Kafka核心源码解读/30 GroupMetadataManager：位移主题保存的只是位移吗？.md)
+* [31 GroupMetadataManager：查询位移时，不用读取位移主题？.md](/专栏/Kafka核心源码解读/31 GroupMetadataManager：查询位移时，不用读取位移主题？.md)
+* [32 GroupCoordinator：在Rebalance中，Coordinator如何处理成员入组？.md](/专栏/Kafka核心源码解读/32 GroupCoordinator：在Rebalance中，Coordinator如何处理成员入组？.md)
+* [33 GroupCoordinator：在Rebalance中，如何进行组同步？.md](/专栏/Kafka核心源码解读/33 GroupCoordinator：在Rebalance中，如何进行组同步？.md)
+* [特别放送（一）经典的Kafka学习资料有哪些？.md](/专栏/Kafka核心源码解读/特别放送（一）经典的Kafka学习资料有哪些？.md)
+* [特别放送（三）我是怎么度过日常一天的？.md](/专栏/Kafka核心源码解读/特别放送（三）我是怎么度过日常一天的？.md)
+* [特别放送（二）一篇文章带你了解参与开源社区的全部流程.md](/专栏/Kafka核心源码解读/特别放送（二）一篇文章带你了解参与开源社区的全部流程.md)
+* [特别放送（五） Kafka 社区的重磅功能：移除 ZooKeeper 依赖.md](/专栏/Kafka核心源码解读/特别放送（五） Kafka 社区的重磅功能：移除 ZooKeeper 依赖.md)
+* [特别放送（四）20道经典的Kafka面试题详解.md](/专栏/Kafka核心源码解读/特别放送（四）20道经典的Kafka面试题详解.md)
+* [结束语 源码学习，我们才刚上路呢.md](/专栏/Kafka核心源码解读/结束语 源码学习，我们才刚上路呢.md)

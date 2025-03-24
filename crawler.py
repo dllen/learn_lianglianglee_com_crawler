@@ -74,7 +74,7 @@ class LiangLiangLeeCrawler:
         
         # Check for specific strings in URL path that indicate valid content
         path = unquote(parsed_url.path.lower())
-        valid_strings = ['/专栏/', '/pdf/', '/恋爱必修课/', '/文章/', '/极客时间/']
+        valid_strings = ['/专栏/', '/文章/', '/极客时间/']
         contains_valid_string = any(s.lower() in path for s in valid_strings)
         
         return has_valid_extension or contains_valid_string
@@ -134,18 +134,29 @@ class LiangLiangLeeCrawler:
         Returns:
             str: Markdown content
         """
-        # Find the main content container - adjust selector based on the website structure
-        main_content = soup.find('main') or soup.find('article') or soup.find('div', class_='content')
+        # Find the book content container
+        main_content = soup.find('div', class_='book-content')
         
         if not main_content:
-            main_content = soup  # Use the entire page if no main content container is found
+            logger.warning(f"No 'book-content' div found in {url}")
+            return None
+        
+        # URL decode all links and convert to relative paths
+        for link in main_content.find_all('a', href=True):
+            href = unquote(link['href'])
+            # Convert absolute URLs to relative paths if they match base URL
+            if href.startswith(self.base_url):
+                href = href[len(self.base_url):]
+                if not href.startswith('/'):
+                    href = '/' + href
+            link['href'] = href
         
         # Add title
         title = soup.title.string if soup.title else "Untitled"
         markdown_content = f"# {title}\n\n"
         
         # Add source URL as reference
-        markdown_content += f"Source: {url}\n\n"
+        markdown_content += f"Source: {unquote(url)}\n\n"
         
         # Convert HTML to Markdown
         markdown_content += md(str(main_content), heading_style="ATX")
@@ -326,17 +337,18 @@ def main():
     crawler1 = LiangLiangLeeCrawler(
         base_url="https://learn.lianglianglee.com/%e4%b8%93%e6%a0%8f",
         output_dir="output",
-        delay=1  # 1 second delay between requests
+        delay=10  # 1 second delay between requests
     )
     
     # Start crawling
     crawler1.crawl(max_pages=None, concurrency=3)
 
+
     # Create and run the crawler
     crawler2 = LiangLiangLeeCrawler(
-        base_url="https://learn.lianglianglee.com/PDF",
+        base_url="https://learn.lianglianglee.com/%e4%b8%93%e6%a0%8f",
         output_dir="output",
-        delay=1  # 1 second delay between requests
+        delay=10  # 1 second delay between requests
     )
     
     # Start crawling
@@ -344,33 +356,13 @@ def main():
 
     # Create and run the crawler
     crawler3 = LiangLiangLeeCrawler(
-        base_url="https://learn.lianglianglee.com/%e6%81%8b%e7%88%b1%e5%bf%85%e4%bf%ae%e8%af%be",
+        base_url="https://learn.lianglianglee.com/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4",
         output_dir="output",
-        delay=1  # 1 second delay between requests
+        delay=10  # 1 second delay between requests
     )
     
     # Start crawling
     crawler3.crawl(max_pages=None, concurrency=3)
-
-    # Create and run the crawler
-    crawler4 = LiangLiangLeeCrawler(
-        base_url="https://learn.lianglianglee.com/%e6%96%87%e7%ab%a0",
-        output_dir="output",
-        delay=1  # 1 second delay between requests
-    )
-    
-    # Start crawling
-    crawler4.crawl(max_pages=None, concurrency=3)
-
-    # Create and run the crawler
-    crawler5 = LiangLiangLeeCrawler(
-        base_url="https://learn.lianglianglee.com/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4",
-        output_dir="output",
-        delay=1  # 1 second delay between requests
-    )
-    
-    # Start crawling
-    crawler5.crawl(max_pages=None, concurrency=3)
 
 if __name__ == "__main__":
     main()

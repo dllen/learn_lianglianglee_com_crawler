@@ -1,27 +1,6 @@
 # Java基础36讲 
 
-Source: https://learn.lianglianglee.com/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/Java%e5%9f%ba%e7%a1%8036%e8%ae%b2.md
-
-Java基础36讲 
-
-
-
-[![](/static/favicon.png)
-技术文章摘抄](/)
-
-* [首页](/)
-* [上一级](../)
-
-* [Java基础36讲.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/Java%e5%9f%ba%e7%a1%8036%e8%ae%b2.md)
-* [Java错误示例100讲.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/Java%e9%94%99%e8%af%af%e7%a4%ba%e4%be%8b100%e8%ae%b2.md)
-* [Linux性能优化.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/Linux%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96.md)
-* [MySQL实战45讲.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/MySQL%e5%ae%9e%e6%88%9845%e8%ae%b2.md)
-* [从0开始学微服务.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/%e4%bb%8e0%e5%bc%80%e5%a7%8b%e5%ad%a6%e5%be%ae%e6%9c%8d%e5%8a%a1.md)
-* [代码精进之路.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/%e4%bb%a3%e7%a0%81%e7%b2%be%e8%bf%9b%e4%b9%8b%e8%b7%af.md)
-* [持续交付36讲.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/%e6%8c%81%e7%bb%ad%e4%ba%a4%e4%bb%9836%e8%ae%b2.md)
-* [程序员进阶攻略.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/%e7%a8%8b%e5%ba%8f%e5%91%98%e8%bf%9b%e9%98%b6%e6%94%bb%e7%95%a5.md)
-* [趣谈网络协议.md](/%e6%9e%81%e5%ae%a2%e6%97%b6%e9%97%b4/%e8%b6%a3%e8%b0%88%e7%bd%91%e7%bb%9c%e5%8d%8f%e8%ae%ae.md)
-* [捐赠](/assets/捐赠.md)
+Source: https://learn.lianglianglee.com/极客时间/Java基础36讲.md
 
 因收到Google相关通知，网站将会择期关闭。[相关通知内容](https://lumendatabase.org/notices/44265620)
 
@@ -6945,8 +6924,3 @@ Snowflake 的[官方版本](https://github.com/twitter/snowflake)是基于 Scala
 ## 一课一练
 
 关于今天我们讨论的题目你做到心中有数了吗？今天的思考题是，从理论上来看，Snowflake 这种基于时间的算法，从形式上天然地限制了 ID 的并发生成数量，如果在极端情况下，短时间需要更多 ID，有什么办法解决呢？
-
----
-
-© 2019 - 2023 [Liangliang Lee](/cdn-cgi/l/email-protection#dcb0b0b0e5e8ededeceb9cbbb1bdb5b0f2bfb3b1).
-Powered by [gin](https://github.com/gin-gonic/gin) and [hexo-theme-book](https://github.com/kaiiiz/hexo-theme-book).
